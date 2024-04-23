@@ -88,9 +88,14 @@ class sink(larger):
   #
   ###################################################
 
+sink = sink()
+queue = queue(10, sink)
+generator = generator(queue, 7)
 
+send(GENERATE, generator.arrivalTime(), generator, [])
 
 while simTime < stopTime:
+    print(simTime) 
     [simTime, signalType, dest, info] = heapq.heappop(signalList)
     dest.treatSignal(signalType, info)
 
