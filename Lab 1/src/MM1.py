@@ -17,9 +17,6 @@ ARRIVAL = 2
 MEASUREMENT = 3
 DEPARTURE = 4
 
-simTime = 0.0
-stopTime = 1000.0
-
 class larger():
     def __gt__(self, other):
         return False
@@ -81,12 +78,9 @@ class sink(larger):
         self.totalTime = self.totalTime + simTime - info
         self.T.append(simTime - info)
 
-          
-  ###################################################
-  #
-  # Add code to create a queuing system  here
-  #
-  ###################################################
+
+simTime = 0.0
+stopTime = 1000.0
 
 sink = sink()
 queue = queue(10, sink)
@@ -96,7 +90,6 @@ send(GENERATE, 0, generator, [])
 send(MEASUREMENT, 0.0, queue, [])
 
 while simTime < stopTime:
-    print(simTime) 
     [simTime, signalType, dest, info] = heapq.heappop(signalList)
     dest.treatSignal(signalType, info)
 
@@ -104,36 +97,3 @@ while simTime < stopTime:
 # Plot the number of customers in the system
 plt.plot(queue.measuredValues)
 plt.show()
-
-# Questions
-# how many servers are there?
-# there is one server in the system. The queue class places the arrivals in
-# the queue every time except for when the queue is empty and the server is free.
-
-# how many places does the buffer have?
-# The buffer has infinite places. 
-#
-# self.buffer = Queue(maxsize=0)
-#
-# when the maxsize in Queue is set to 0, the buffer has infinite places.
-
-# what is the mean time between arrivals?
-# answer: it is lambda
-
-# What is the list arrivalTimes used for?
-# answer: it is used to keep track of the arrival times of the customers.
-
-# What does the list T contain after the simulation run?
-# answer: The list T contains the time each customer spent in the system.
-
-# What does the list measuredValues contain after the simulation run?
-# answer: The list measuredValues contains the number of customers in the system at each measurement point.
-
-
-
-
-  ###################################################
-  #
-  # Add code to print final result
-  #
-  ###################################################
