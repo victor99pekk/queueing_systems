@@ -44,15 +44,20 @@ class queue(larger):
         self.buffer = Queue(maxsize=0)
         self.mu = mu 
         self.sendTo = sendTo
+        self.totCounter = 0
+        self.blockCounter = 0
     def serviceTime(self):
-        return simTime + random.expovariate(self.mu)    #this is where the serive time is decided
+        return simTime + random.expovariate(self.mu)   #this is where the serive time is decided
     def treatSignal(self, x, info):
+        self.totCounter +=1
         if x == ARRIVAL:
             if self.numberInQueue == 0:
                 # this is where the service time is set for the task
                 send(DEPARTURE,self.serviceTime() , self, []) #Schedule  a departure for the arrival customer if queue is empty
+            if self.numberInQueue >= 6:
+                self.blockCounter += 1
             self.numberInQueue = self.numberInQueue + 1
-            self.buffer.put(info)
+            self.buffer.put(info)                
         elif x == DEPARTURE:
             self.numberInQueue = self.numberInQueue - 1
             if self.numberInQueue > 0:
@@ -84,7 +89,7 @@ stopTime = 1000.0
 
 sink = sink()
 queue = queue(10, sink)
-generator = generator(queue, 7)
+generator = generator(queue, 11)
 
 send(GENERATE, 0, generator, [])
 send(MEASUREMENT, 0.0, queue, [])
@@ -95,5 +100,36 @@ while simTime < stopTime:
 
 
 # Plot the number of customers in the system
-plt.plot(queue.measuredValues)
+# print("response: ", np.mean(sink.T),"\nmean queue length: ", np.mean(queue.measuredValues))
+#plt.hist(sink.T, bins='auto')  # 'auto' automatically determines the number of bins
+# x_values = [0.25, 0.5, 0.7, 0.9, 1, 1.1]
+# y_values = [0.13, 0.19, 0.34, 0.84, 2.78, 58]
+
+# plt.plot(x_values, y_values)
+# plt.ylim(0, 30)
+
+#plt.plot(sink.T[2:101],sink.T[1:100],'*')
+
+# plt.plot(queue.measuredValues)
+# plt.hist(queue.measuredValues, bins='auto')  # 'auto' automatically determines the number of bins
+
+plt.hist(queue.measuredValues, bins='auto', density=True)  # 'auto' automatically determines the number of bins, density=True normalizes the histogram
+
+
+# lambda1 = float(input('Arrival rate (lambda): '))
+# mu = float(input('Service rate (mu): '))
+# maxK = int(input('Maximum k value to plot: '))
+
+
+# k =  np.array([i for i in range(0,maxK)])
+# rho = lambda1/mu
+# pk = pow(rho,k)*(1-rho)
+
+
+
+
+# plt.plot(k,pk,'-') 
+
+
+
 plt.show()
