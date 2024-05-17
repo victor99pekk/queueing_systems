@@ -1,0 +1,87 @@
+3.1
+
+1. den blå är P(fullt), eftersom P(fullt) borde alltid vara större än P(bock) för att block 
+ska ske måste systemet vara fullt.
+
+2. med två kunder i systemet är P(full)=0, det betyder att alla servers aldrig är fulla.
+när man ökar antalet kunder till 3 finns det en risk att alla servers blir upptagna.
+det finns alltså 3 servers i systemet
+
+3. their growth stops
+
+
+3.2
+
+1. traffic= 2/(1/5)=    2/0.2=  10
+Traffic: 10
+Number of servers: 20
+The blocking probabilty is  0.0018690498523543059
+
+2. 15 servers are needed.
+räkna...
+
+3. arrival intensity => 11
+15 -> P(spärr)= 0.0588,     20 -> P(spärr)= 0.0046
+
+
+4. traffic=20   -> (m=26 -> P(spärr)= 0.0372)
+
+5. traffic=22, (m=26 -> P(spärr)= 0.0665)
+
+6. arbetet blir inte fördelat lika bra, om kontakten med den ena går sönder har man
+fortfarande kontakt med det andra.
+
+
+
+4
+1. ja
+
+2. E(N)=20.6,
+
+    17.5
+    A=> 17.5*0.4 | 9  -> 7
+    b=> 17.5*0.6 | 11 -> 10.5
+    \ = 17.5
+    E(T) = E(N) / \ -> E(T)=1.18
+
+    print("mean time in system: ", np.mean(sink.T)) => mean time in system:  1.1920398454279528
+
+3. 
+    q1
+    tid  0.3599794711499269 antal  2.7951807228915664
+
+    q2
+    tid  0.4889354342251729 antal  5.783625730994152
+
+    q3
+    tid  0.8764400421766511 antal  7.471311475409836
+
+    q4
+    tid  1.5224370358013457 antal  5.852971845672576
+
+    q5
+    tid  18.54108036165181 antal  204.7198404785643
+
+4. i q5
+
+
+5. få mer att åka till q4, lägga till en till server i q5
+
+
+4.1
+
+1. 
+totaltime:  11.682412365821508 (12 not 10)
+deterministic -> totaltime:  9.599798236395923
+
+totaltime:  1.0591935321252408
+deterministic -> totaltime:  0.6166470885755719 (10 not 12)
+
+
+2. totaltime:  1.7576832594589815 (10 not 12)
+   totaltime:  12.123066714380418 (12 not 10)
+
+3. E(T)=E(N) * \
+
+
+

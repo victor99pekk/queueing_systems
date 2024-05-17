@@ -17,10 +17,6 @@ GENERATE = 1
 ARRIVAL = 2
 MEASUREMENT = 3
 DEPARTURE = 4
-
-simTime = 0.0
-stopTime = 10000.0
-bufferSize = 4
         
 class larger():
     def __gt__(self, other):
@@ -49,6 +45,8 @@ class queue(larger):
         self.numberOfMeasurements = 0
         self.measuredValues = []
         self.arrivalTimes = []
+        self.Nq = []    # Number of customers in the queue
+        self.Ts = []    # Service time
         self.buffer = Queue(maxsize=0)
         self.mu = mu 
         self.L = L
@@ -58,11 +56,18 @@ class queue(larger):
         self.s = s
 
     def serviceTime(self):
-        return simTime + random.expovariate(self.mu)
+        # return simTime + (1 / self.mu)
+        # return simTime + random.expovariate(self.mu)
+        mu1 = 2*self.mu
+        mu2 = self.mu/2
+        if random.random() < (1/1.5):
+            return simTime + random.expovariate(mu1)
+        else:
+            return simTime + random.expovariate(mu2)
         # return simTime + 1.0
     def treatSignal(self, x, info):
         if x == ARRIVAL:
-            if self.numberInQueue < self.L: 
+            if self.numberInQueue < self.L:
                 if self.numberInQueue == 0:
                     send(DEPARTURE, self.serviceTime(), self, []) #Schedule  a departure for the arrival customer if queue is empty
                 self.numberInQueue = self.numberInQueue + 1
@@ -72,22 +77,27 @@ class queue(larger):
         elif x == DEPARTURE:
             self.numberInQueue = self.numberInQueue - 1
             if self.numberInQueue > 0:
-                send(DEPARTURE,  self.serviceTime(), self, [])  # Schedule  a departure for next customer
+                time = self.serviceTime()
+                #self.Ts.append(time - simTime)    # detta lade jag till för att mäta service tiden
+                send(DEPARTURE,  time, self, [])  # Schedule  a departure for next customer
             tid = self.buffer.get()
             if random.uniform(0, 1) <= self.alpha :
                if self.sendTo1:
                   send(ARRIVAL, simTime, self.sendTo1, tid)
                send(ARRIVAL, simTime, self.s, tid)
             else : # rand >= self.alpha:
-               if self.sendTo2:
-                  send(ARRIVAL, simTime, self.sendTo2, tid) 
-               send(ARRIVAL, simTime, self.s, tid)
+                if self.sendTo2:
+                    send(ARRIVAL, simTime, self.sendTo2, tid) 
+                # self.Ts.append(simTime - tid - (1 / self.mu))
+                self.Ts.append(simTime - tid)
+                send(ARRIVAL, simTime, self.s, tid)
 
 
         elif x == MEASUREMENT:
             self.measuredValues.append(self.numberInQueue)
             self.sumMeasurements = self.sumMeasurements + self.numberInQueue
             self.numberOfMeasurements = self.numberOfMeasurements + 1
+            self.Nq.append(self.numberInQueue)      # lade till denna rad för att mäta antalet kunder i kön
             send(MEASUREMENT, simTime + random.expovariate(1), self, [])
 
             
@@ -115,12 +125,31 @@ class sink(larger):
 # [L1,L2,L3,L4,L5] = [4, 10, 3, 20, 7] 
 alpha = 0.4
 
+simTime = 0.0
+stopTime = 1000.0
+bufferSize = 4
           
-  ###################################################
-  #
-  # Add code to create a queuing system  here
-  #
-  ###################################################
+sink = sink()
+
+queue4 = queue(mu4, alpha=alpha, L=L4, s=sink, sendTo1=None, sendTo2=None)
+queue5 = queue(mu5, alpha=alpha, L=L5, s=sink, sendTo1=None, sendTo2=None)
+queue3 = queue(mu3, alpha=alpha, L=L3, s=sink, sendTo1=queue4, sendTo2=queue5)
+queue1 = queue(mu1, alpha=alpha, L=L1, s=queue3, sendTo1=None, sendTo2=None)
+queue2 = queue(mu2, alpha=alpha, L=L2, s=queue3, sendTo1=None, sendTo2=None)
+    
+
+generatorA = generator(queue1, lambda1)
+generatorB = generator(queue2, lambda2)
+
+send(GENERATE, 0, generatorA, [])
+send(GENERATE, 0, generatorB, [])
+
+send(MEASUREMENT, 0.0, queue1, [])
+send(MEASUREMENT, 0.0, queue2, [])
+send(MEASUREMENT, 0.0, queue3, [])
+send(MEASUREMENT, 0.0, queue4, [])
+send(MEASUREMENT, 0.0, queue5, [])
+
 
 
 
@@ -129,9 +158,8 @@ while simTime < stopTime:
     dest.treatSignal(signalType, info)
 
 
-
-
-
+print("tid ", np.mean(queue5.Ts), "antal ", np.mean(queue5.Nq))
+print("totaltime: ", np.mean(sink.T))
   ###################################################
   #
   # Add code to print final result
