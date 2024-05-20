@@ -48,8 +48,8 @@ class dispatcher(larger):
         self.queues = queues
         self.rr = 0
     def randomDispatch(self):
-        # Here code should be added
-        return 
+        self.rr = random.randint(0, 4)
+        return self.queues[self.rr] 
     def roundRobin(self):
         self.rr = (self.rr + 1) % len(self.queues)
         return self.queues[self.rr]
@@ -64,7 +64,7 @@ class dispatcher(larger):
         
     def treatSignal(self, x, info):
         if x == ARRIVAL:
-            send(ARRIVAL, simTime, self.roundRobin(), [simTime])
+            send(ARRIVAL, simTime, self.fewestCustomers(), [simTime])
        
 
             

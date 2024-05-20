@@ -14,17 +14,19 @@ det finns alltså 3 servers i systemet
 
 1. traffic= 2/(1/5)=    2/0.2=  10
 Traffic: 10
-Number of servers: 20
+Number of servers: 10
 The blocking probabilty is  0.0018690498523543059
 
 2. 15 servers are needed.
 räkna...
 
 3. arrival intensity => 11
-15 -> P(spärr)= 0.0588,     20 -> P(spärr)= 0.0046
+15 -> P(spärr)= 0.0588,     (20 -> P(spärr)= 0.0046)
 
 
-4. traffic=20   -> (m=26 -> P(spärr)= 0.0372)
+4. 
+\ = 4, u = (1/5)
+traffic=20   -> (m=26 -> P(spärr)= 0.0372)
 
 5. traffic=22, (m=26 -> P(spärr)= 0.0665)
 
@@ -81,7 +83,74 @@ deterministic -> totaltime:  0.6166470885755719 (10 not 12)
 2. totaltime:  1.7576832594589815 (10 not 12)
    totaltime:  12.123066714380418 (12 not 10)
 
-3. E(T)=E(N) * \
+3. didn't work
 
 
 
+5.
+
+1. oddsen minskar för att det är många personer jämfört med att systemet är tomt.
+alla servers har ungefär lika mycket jobb
+
+
+Victors-MacBook-Air:Desktop victorpekkari$ /usr/local/bin/python3 /Users/victorpekkari/Desktop/kö/QueuingSystems/Lab2/src/dispatcher.py
+In queueing system  0 :  3.93778
+In queueing system  1 :  4.024920249202492
+In queueing system  2 :  4.137681376813768
+In queueing system  3 :  4.190121901219012
+In queueing system  4 :  4.017810178101781
+Mean time in queue:  5.077552866348121
+Elapsed time:  6.573602199554443
+
+(round-robin)
+Victors-MacBook-Air:Desktop victorpekkari$ /usr/local/bin/python3 /Users/victorpekkari/Desktop/kö/QueuingSystems/Lab2/src/dispatcher.py
+In queueing system  0 :  2.4829148291482914
+In queueing system  1 :  2.4470044700447002
+In queueing system  2 :  2.45322
+In queueing system  3 :  2.7063470634706346
+In queueing system  4 :  2.5765457654576545
+Mean time in queue:  3.170624290616594
+Elapsed time:  6.346989154815674
+
+(fewest)
+Victors-MacBook-Air:Desktop victorpekkari$ /usr/local/bin/python3 /Users/victorpekkari/Desktop/kö/QueuingSystems/Lab2/src/dispatcher.py
+In queueing system  0 :  1.7745177451774519
+In queueing system  1 :  1.5811258112581126
+In queueing system  2 :  1.4022240222402225
+In queueing system  3 :  1.22399
+In queueing system  4 :  1.045040450404504
+Mean time in queue:  1.7581514777704204
+Elapsed time:  5.97695779800415
+
+
+last question
+
+Victors-MacBook-Air:Desktop victorpekkari$ /usr/local/bin/python3 /Users/victorpekkari/Desktop/kö/QueuingSystems/Lab2/src/dispatcher.py
+In queueing system  0 :  3.925909259092591
+In queueing system  1 :  15167.135291352914
+In queueing system  2 :  1.148621486214862
+In queueing system  3 :  3.92059920599206
+In queueing system  4 :  3.95532
+Mean time in queue:  2538.9415856734086
+Elapsed time:  7.839349031448364
+
+(round-robin)
+Victors-MacBook-Air:Desktop victorpekkari$ /usr/local/bin/python3 /Users/victorpekkari/Desktop/kö/QueuingSystems/Lab2/src/dispatcher.py
+In queueing system  0 :  2.5538055380553804
+In queueing system  1 :  15098.59236
+In queueing system  2 :  0.7896178961789618
+In queueing system  3 :  2.5413154131541313
+In queueing system  4 :  2.4786247862478623
+Mean time in queue:  2535.46265055235
+Elapsed time:  6.49213719367981
+
+(fewest)
+Victors-MacBook-Air:Desktop victorpekkari$ /usr/local/bin/python3 /Users/victorpekkari/Desktop/kö/QueuingSystems/Lab2/src/dispatcher.py
+In queueing system  0 :  1.8099280992809927
+In queueing system  1 :  1.9101891018910189
+In queueing system  2 :  1.3171431714317143
+In queueing system  3 :  1.2674626746267463
+In queueing system  4 :  1.08813
+Mean time in queue:  1.8503967688747318
+Elapsed time:  6.448421955108643
+Victors-MacBook-Air:Desktop victorpekkari$ 
